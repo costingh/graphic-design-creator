@@ -33,6 +33,10 @@ export default function Login() {
     setLoginData(null);
   };
 
+  if (loginData) {
+    return (window.location.href = "/dashboard");
+  }
+
   return (
     <header className="App-header">
       <h1>Log in</h1>
