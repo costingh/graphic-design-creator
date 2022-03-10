@@ -5,16 +5,19 @@ import RecommendedForYouDesigns from "./RecommendedForYouDesigns";
 import Upload from "./Upload";
 import Folders from "./Folders";
 import Trash from "./Trash";
+import Explore from "./Explore";
 
 function Workspace() {
   return (
     <div className="Workspace">
-      <h1>All public designs</h1>
       <div className="innerWorkspace">
         <Router>
           <Switch>
             <Route path="/dashboard/trash">
               <Trash />
+            </Route>
+            <Route path="/dashboard/explore">
+              <Explore />
             </Route>
             <Route path="/dashboard/upload">
               <Upload />

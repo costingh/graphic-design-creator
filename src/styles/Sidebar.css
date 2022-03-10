@@ -1,8 +1,8 @@
 .Sidebar {
-  border-right: 1px solid #ccc;
+  /* border-right: 1px solid #ccc; */
   max-width: 100%;
-  width: 300px;
-  padding: 40px 30px;
+  width: 350px;
+  padding: 40px 15px;
 }
 
 .Sidebar div {
@@ -10,15 +10,18 @@
   align-items: center;
   column-gap: 20px;
   font-size: 15px;
-  padding: 15px 0px;
+  padding: 10px 15px;
   cursor: pointer;
   transition: all 0.3s ease;
+  margin: 10px 0px;
 }
 
 .Sidebar div:hover {
-  color: rgb(126, 126, 126);
+  background-color: rgba(126, 126, 126, 0.2);
 }
 
 .Sidebar .sidebarListItem.active {
   font-weight: 700;
+  background-color: rgba(126, 126, 126, 0.3);
+  border-radius: 6px;
 }
