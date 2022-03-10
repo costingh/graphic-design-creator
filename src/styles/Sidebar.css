@@ -1,0 +1,24 @@
+.Sidebar {
+  border-right: 1px solid #ccc;
+  max-width: 100%;
+  width: 300px;
+  padding: 40px 30px;
+}
+
+.Sidebar div {
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+  font-size: 15px;
+  padding: 15px 0px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.Sidebar div:hover {
+  color: rgb(126, 126, 126);
+}
+
+.Sidebar .sidebarListItem.active {
+  font-weight: 700;
+}
