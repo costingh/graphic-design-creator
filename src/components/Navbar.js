@@ -7,11 +7,19 @@ function Navbar() {
       ? JSON.parse(localStorage.getItem("loginData"))
       : null
   );
-  const [opened, setOpened] = useState(false);
+  const [opened1, setOpened1] = useState(false);
+  const [opened2, setOpened2] = useState(false);
 
   const handleOpenMenu = () => {
-    setOpened(!opened);
+    setOpened1(!opened1);
   };
+
+  const handleCustomDesign = () => {
+    setOpened1(false);
+    setOpened2(true);
+  };
+
+  console.log(JSON.parse(localStorage.getItem("loginData")));
 
   return (
     <div className="Navbar">
@@ -22,8 +30,74 @@ function Navbar() {
         </div>
         <img className="profileImage" src={loginData.picture} alt="" />
       </div>
-      <div className={`absolute ${opened && "opened"}`}>
-        <div>
+      <div className={`absolute ${opened2 && "opened"}`}>
+        <div
+          onClick={() => {
+            setOpened2(false);
+            setOpened1(true);
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            style={{
+              transform: `${opened2 ? "rotate(45deg)" : "rotate(0deg)"}`,
+            }}
+          >
+            <path d="M11 11v-11h1v11h11v1h-11v11h-1v-11h-11v-1h11z" />
+          </svg>
+          <p>Custom Dimensions</p>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            columnGap: "20px",
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <input
+            type="number"
+            id="width"
+            name="width"
+            step="1"
+            placeholder="Width"
+            style={{
+              width: "40%",
+              padding: "9px 7px",
+              borderRadius: "5px",
+              appearance: "none",
+              border: "1px solid #ccc",
+
+              focus: "1px solid red",
+            }}
+          />
+          <input
+            type="number"
+            id="height"
+            name="height"
+            step="1"
+            placeholder="Width"
+            style={{
+              width: "40%",
+              padding: "9px 7px",
+              borderRadius: "5px",
+              appearance: "none",
+              border: "1px solid #ccc",
+
+              focus: "1px solid red",
+            }}
+          />
+          <span>px</span>
+        </div>
+        <div className="createDesignButton">
+          <p style={{ margin: "0px auto" }}>Create Design</p>
+        </div>
+      </div>
+      <div className={`absolute ${opened1 && "opened"}`}>
+        <div onClick={handleCustomDesign}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

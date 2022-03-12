@@ -8,6 +8,16 @@ const SIDEBAR_CONFIG = [
     path: "M20 7.093v-5.093h-3v2.093l3 3zm4 5.907l-12-12-12 12h3v10h18v-10h3zm-5 8h-14v-10.26l7-6.912 7 6.99v10.182zm-5-1h-4v-6h4v6z",
   },
   {
+    name: "Templates",
+    link: "templates",
+    path: "M19.5 10V5a.5.5 0 0 0-.5-.5h-4.5V10h5zm0 1.5h-5v8H19a.5.5 0 0 0 .5-.5v-7.5zm-6.5-7H5a.5.5 0 0 0-.5.5v14c0 .28.22.5.5.5h8v-15zM5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2z",
+  },
+  {
+    name: "Patterns",
+    link: "patterns",
+    path: "m6.5 4.25.75-.75a2.121 2.121 0 0 1 3 3L6.5 10.25 2.75 6.5a2.121 2.121 0 0 1 3-3l.75.75zm7 6 4-7.5 4 7.5h-8zm-10.75 3.5h7.5v7.5h-7.5v-7.5zm14.75-.25a4 4 0 1 0 0 8 4 4 0 0 0 0-8z",
+  },
+  {
     name: "Explore",
     link: "explore",
     path: "M5 8.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5zm9 .5l-2.519 4-2.481-1.96-4 5.96h14l-5-8zm8-4v14h-20v-14h20zm2-2h-24v18h24v-18z",
@@ -33,13 +43,17 @@ function Sidebar() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    if (window.location.href.split("/").includes("explore")) setActiveIndex(1);
-    else if (window.location.href.split("/").includes("folders"))
+    if (window.location.href.split("/").includes("explore")) setActiveIndex(3);
+    else if (window.location.href.split("/").includes("templates"))
+      setActiveIndex(1);
+    else if (window.location.href.split("/").includes("patterns"))
       setActiveIndex(2);
-    else if (window.location.href.split("/").includes("upload"))
-      setActiveIndex(3);
-    else if (window.location.href.split("/").includes("trash"))
+    else if (window.location.href.split("/").includes("folders"))
       setActiveIndex(4);
+    else if (window.location.href.split("/").includes("upload"))
+      setActiveIndex(5);
+    else if (window.location.href.split("/").includes("trash"))
+      setActiveIndex(6);
     else setActiveIndex(0);
   }, []);
 
