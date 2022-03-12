@@ -6,6 +6,8 @@ import Upload from "./Upload";
 import Folders from "./Folders";
 import Trash from "./Trash";
 import Explore from "./Explore";
+import NewDesign from "./NewDesign";
+import EditorContainer from "./editor/EditorContainer";
 
 function Workspace() {
   return (

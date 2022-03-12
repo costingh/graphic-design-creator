@@ -1,0 +1,166 @@
+.editorContainerInnerFlex {
+  width: 100%;
+  height: calc(100vh - 80px);
+  display: flex;
+}
+
+.editorContainerDrawer {
+  background-color: #18191b;
+  position: relative;
+  z-index: 10;
+}
+
+.editorContainerDrawer .item {
+  width: 72px;
+  height: 72px;
+  position: relative;
+  z-index: 2;
+  top: 0px;
+  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  color: rgb(201, 201, 201);
+  transition: all 0.1s ease;
+  cursor: pointer;
+}
+
+.editorContainerDrawer .item.active {
+  background-color: #252627;
+}
+
+.editorContainerDrawer .item:hover {
+  color: #fff;
+}
+
+.editorContainerDrawer .item span {
+  font-size: 11px;
+}
+
+.drawerContent {
+  width: 360px;
+  height: 100%;
+  transition: all 1s ease;
+  position: relative;
+  margin-left: -360px;
+}
+
+.drawerContent.active {
+  margin-left: 0px;
+}
+
+.drawerContent .closeDrawer {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(19px, -50%);
+}
+
+.innerDrawer {
+  background-color: #252627;
+  position: relative;
+  height: 100%;
+  padding: 20px;
+}
+
+.closeDrawerSvg {
+  position: absolute;
+  top: calc(77px / 2 - 16px / 2);
+  right: 5px;
+  color: #eee;
+  cursor: pointer;
+}
+
+.editorContainerInner {
+  width: 100%;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  transition: all 0.3s ease;
+}
+
+.editorContainerInnerNav {
+  height: 50px;
+  width: 100%;
+  border-bottom: 1px solid rgba(204, 204, 204, 0.467);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 40px;
+}
+
+.editorContainerInnerForeground {
+  background-color: #e0e2e4;
+  width: 100%;
+  height: calc(100% - 50px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.elements {
+  width: 100%;
+  height: 100%;
+}
+
+.elements h1 {
+  color: #e1e1e1;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.elements .elementsContainer {
+  display: flex;
+  column-gap: 15px;
+  width: 100%;
+  overflow-x: auto;
+  height: 80px;
+}
+
+.elements .elementsContainer .element {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.elements .elementsContainer .element:hover {
+  opacity: 0.8;
+}
+
+.elements .elementsContainer .element .square {
+  width: 100%;
+  height: 100%;
+  background-color: #c8d1d9;
+}
+.elements .elementsContainer .element .circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #c8d1d9;
+}
+.elements .elementsContainer .element .roundedBorderSquare {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background-color: #c8d1d9;
+}
+
+.deleteActiveObjButton {
+  margin-left: auto;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #18191b;
+  color: #18191b;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.4px;
+  font-weight: 400;
+}
+
+.deleteActiveObjButton:hover {
+  border: 1px solid #c8d1d9;
+}

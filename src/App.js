@@ -3,6 +3,7 @@ import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 
 import "./App.css";
+import EditorContainer from "./components/editor/EditorContainer";
 
 function App() {
   return (
@@ -11,6 +12,9 @@ function App() {
         <Switch>
           <Route path="/dashboard">
             <Dashboard />
+          </Route>
+          <Route path="/design">
+            <EditorContainer />
           </Route>
           <Route path="/">
             <Login />
