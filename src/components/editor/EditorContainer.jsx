@@ -126,10 +126,14 @@ const DRAWER_CONFIG = [
   },
 ];
 
+let numberOfDrawings = 0;
+
 function EditorContainer() {
   const [activeTab, setActiveTab] = useState("");
   const [openDrawer, setOpenDrawer] = useState(false);
   const [canvas, setCanvas] = useState("");
+  const [customHeight, setCustomHeight] = useState(400);
+  const [customWidth, setCustomWidth] = useState(400);
 
   useEffect(() => {
     setCanvas(initCanvas());
@@ -147,31 +151,48 @@ function EditorContainer() {
 
   const initCanvas = () =>
     new fabric.Canvas("canvas", {
-      height: 400,
-      width: 400,
+      height: customHeight,
+      width: customWidth,
       backgroundColor: "#eee",
     });
 
   const addRectangle = (canvasRefference) => {
     const rect = new fabric.Rect({
-      left: 100,
-      top: 100,
-      height: 200,
-      width: 200,
+      left: customWidth / 4,
+      top: customHeight / 4,
+      height: customHeight / 2,
+      width: customWidth / 2,
       fill: "#c8d1d9",
     });
     canvasRefference.add(rect);
+
+    canvas.item(numberOfDrawings).set({
+      borderColor: "rgb(0, 166, 255)",
+      cornerColor: "rgb(6, 137, 208)",
+      cornerSize: 6,
+      transparentCorners: false,
+    });
+    numberOfDrawings += 1;
+
     canvasRefference.renderAll();
   };
 
   const addCircle = (canvasRefference) => {
     const circle = new fabric.Circle({
-      left: 100,
-      top: 100,
-      radius: 100,
+      left: customWidth / 4,
+      top: customHeight / 4,
+      radius: Math.min(customHeight / 4, customWidth / 4),
       fill: "#c8d1d9",
     });
     canvasRefference.add(circle);
+    canvas.item(numberOfDrawings).set({
+      borderColor: "rgb(0, 166, 255)",
+      cornerColor: "rgb(6, 137, 208)",
+      cornerSize: 6,
+      transparentCorners: false,
+    });
+    numberOfDrawings += 1;
+
     canvasRefference.renderAll();
   };
 
@@ -182,6 +203,29 @@ function EditorContainer() {
       });
       canvas.discardActiveObject().renderAll();
     }
+  };
+
+  const resize = (e) => {
+    /* canvas.setWidth(500);
+    canvas.setHeight(500);
+    canvas.calcOffset();
+
+    let canvasWrapper = document.querySelector(".canvasWrapper");
+    console.log(e.clientX);
+    canvasWrapper.style.width = e.clientX;
+
+    let width;
+    let height;
+    if (canvas) {
+      const newWidth = canvasWrapper.clientWidth;
+      const newHeight = canvasWrapper.clientHeight;
+      if (newWidth !== width || newHeight !== height) {
+        width = newWidth;
+        height = newHeight;
+        canvas.setWidth(newWidth);
+        canvas.setHeight(newHeight);
+      }
+    } */
   };
 
   return (
@@ -287,7 +331,7 @@ function EditorContainer() {
             </div>
           </div>
           <div className="editorContainerInnerForeground">
-            <div>
+            <div className="canvasWrapper" onMouseMove={resize}>
               <NewDesign canvas={canvas} />
             </div>
           </div>

@@ -164,3 +164,9 @@
 .deleteActiveObjButton:hover {
   border: 1px solid #c8d1d9;
 }
+
+.canvasWrapper {
+  border: solid 2px rgb(0, 166, 255);
+
+  overflow: hidden;
+}
