@@ -134,6 +134,8 @@ function EditorContainer() {
   const [canvas, setCanvas] = useState("");
   const [customHeight, setCustomHeight] = useState(400);
   const [customWidth, setCustomWidth] = useState(400);
+  const [mouseDown, setMouseDown] = useState(false);
+  const [mouseUp, setMouseUp] = useState(false);
 
   useEffect(() => {
     setCanvas(initCanvas());
@@ -196,36 +198,41 @@ function EditorContainer() {
     canvasRefference.renderAll();
   };
 
+  const addText = (canvasRefference) => {
+    const text = new fabric.Text("text", {
+      left: customWidth / 4,
+      top: customHeight / 4,
+      fill: "white",
+    });
+    canvasRefference.add(text);
+    canvas.item(numberOfDrawings).set({
+      borderColor: "rgb(0, 166, 255)",
+      cornerColor: "rgb(6, 137, 208)",
+      cornerSize: 6,
+      transparentCorners: false,
+    });
+    numberOfDrawings += 1;
+
+    canvasRefference.renderAll();
+  };
+
   const handleDelete = () => {
     if (canvas) {
       canvas.getActiveObjects().forEach((obj) => {
         canvas.remove(obj);
+        numberOfDrawings -= 1;
       });
       canvas.discardActiveObject().renderAll();
     }
   };
 
   const resize = (e) => {
-    /* canvas.setWidth(500);
-    canvas.setHeight(500);
-    canvas.calcOffset();
-
-    let canvasWrapper = document.querySelector(".canvasWrapper");
-    console.log(e.clientX);
-    canvasWrapper.style.width = e.clientX;
-
-    let width;
-    let height;
-    if (canvas) {
-      const newWidth = canvasWrapper.clientWidth;
-      const newHeight = canvasWrapper.clientHeight;
-      if (newWidth !== width || newHeight !== height) {
-        width = newWidth;
-        height = newHeight;
-        canvas.setWidth(newWidth);
-        canvas.setHeight(newHeight);
+    if (mouseDown && !mouseUp) {
+      if (e.target.className === "canvasWrapper") {
+        e.target.style.cursor = "e-resize";
+        console.log(e.clientX);
       }
-    } */
+    }
   };
 
   return (
@@ -267,6 +274,20 @@ function EditorContainer() {
                       <div className="roundedBorderSquare"></div>
                     </div>
                   </div>
+                </div>
+              )}
+              {activeTab === "Text" && (
+                <div className="elements">
+                  <h1>Text</h1>
+                  <div
+                    className="elementsContainer text bold"
+                    onClick={() => addText(canvas)}
+                  >
+                    Text
+                  </div>
+                  <div className="elementsContainer text semi-bold">Text</div>
+                  <div className="elementsContainer text normal">Text</div>
+                  <div className="elementsContainer text">Text</div>
                 </div>
               )}
             </div>
@@ -331,7 +352,12 @@ function EditorContainer() {
             </div>
           </div>
           <div className="editorContainerInnerForeground">
-            <div className="canvasWrapper" onMouseMove={resize}>
+            <div
+              className="canvasWrapper"
+              onMouseMove={resize}
+              onMouseDown={() => setMouseDown(!mouseDown)}
+              onMouseUp={() => setMouseUp(!mouseUp)}
+            >
               <NewDesign canvas={canvas} />
             </div>
           </div>

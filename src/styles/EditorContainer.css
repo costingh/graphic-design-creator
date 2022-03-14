@@ -166,7 +166,44 @@
 }
 
 .canvasWrapper {
-  border: solid 2px rgb(0, 166, 255);
-
+  border: solid 2px transparent;
   overflow: hidden;
+}
+
+.canvasWrapper:hover {
+  border: solid 2px rgb(0, 166, 255);
+}
+
+.elementsContainer.text {
+  border-radius: 10px;
+  background-color: #343537;
+  color: #eee;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  text-align: left;
+  height: auto;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.elementsContainer.text:hover {
+  background-color: #424446;
+}
+
+.elementsContainer.text.bold {
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.elementsContainer.text.semi-bold {
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.elementsContainer.text.normal {
+  font-size: 18px;
+  font-weight: 500;
 }
