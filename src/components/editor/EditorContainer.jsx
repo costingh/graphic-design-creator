@@ -136,6 +136,8 @@ function EditorContainer() {
   const [customWidth, setCustomWidth] = useState(400);
   const [mouseDown, setMouseDown] = useState(false);
   const [mouseUp, setMouseUp] = useState(false);
+  const [activeObject, setActiveObject] = useState(null);
+  const [currentObjectColor, setCurrentObjectColor] = useState("");
 
   useEffect(() => {
     setCanvas(initCanvas());
@@ -198,13 +200,16 @@ function EditorContainer() {
     canvasRefference.renderAll();
   };
 
-  const addText = (canvasRefference) => {
-    const text = new fabric.Text("text", {
+  const addText = (canvasRefference, textToAdd, fontSize) => {
+    const text = new fabric.IText(textToAdd, {
       left: customWidth / 4,
       top: customHeight / 4,
-      fill: "white",
+      fontSize: fontSize,
+      fill: "#000000",
+      hiddenTextarea: null,
     });
     canvasRefference.add(text);
+
     canvas.item(numberOfDrawings).set({
       borderColor: "rgb(0, 166, 255)",
       cornerColor: "rgb(6, 137, 208)",
@@ -230,9 +235,33 @@ function EditorContainer() {
     if (mouseDown && !mouseUp) {
       if (e.target.className === "canvasWrapper") {
         e.target.style.cursor = "e-resize";
-        console.log(e.clientX);
+        /*  console.log(e.clientX); */
       }
     }
+  };
+
+  useEffect(() => {
+    if (canvas) {
+      setActiveObject(canvas.getActiveObject());
+    }
+  });
+
+  useEffect(() => {
+    if (activeObject) {
+      /* console.log(activeObject.get("type")); */
+      setCurrentObjectColor(activeObject.fill);
+      console.log(activeObject);
+    }
+  }, [activeObject]);
+
+  const setNewColor = (newColor) => {
+    setCurrentObjectColor(newColor);
+    if (activeObject) {
+      activeObject.fill = newColor;
+      activeObject.dirty = true;
+    }
+
+    if (canvas) canvas.renderAll();
   };
 
   return (
@@ -278,16 +307,160 @@ function EditorContainer() {
               )}
               {activeTab === "Text" && (
                 <div className="elements">
-                  <h1>Text</h1>
+                  <h1>Adaugati text</h1>
                   <div
                     className="elementsContainer text bold"
-                    onClick={() => addText(canvas)}
+                    onClick={() => addText(canvas, "Adauga un titlu", 25)}
                   >
-                    Text
+                    Adauga un titlu
                   </div>
-                  <div className="elementsContainer text semi-bold">Text</div>
-                  <div className="elementsContainer text normal">Text</div>
-                  <div className="elementsContainer text">Text</div>
+                  <div
+                    className="elementsContainer text semi-bold"
+                    onClick={() => addText(canvas, "Adauga un subtitlu", 21)}
+                  >
+                    Adauga un subtitlu
+                  </div>
+                  <div
+                    className="elementsContainer text normal"
+                    onClick={() => addText(canvas, "Adauga un comentariu", 15)}
+                  >
+                    Adauga un comentariu
+                  </div>
+                </div>
+              )}
+              {activeTab === "ColorPalette" && (
+                <div className="elements">
+                  <h1>Selectati o culoare</h1>
+                  <div className="colorGrid">
+                    <div className="colorRow">
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#000000" }}
+                        onClick={() => setNewColor("#000")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#545454" }}
+                        onClick={() => setNewColor("#545454")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#737373" }}
+                        onClick={() => setNewColor("#737373")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#a6a6a6" }}
+                        onClick={() => setNewColor("#a6a6a6")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#d9d9d9" }}
+                        onClick={() => setNewColor("#d9d9d9")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#ffffff" }}
+                        onClick={() => setNewColor("#ffffff")}
+                      ></div>
+                    </div>
+                    <div className="colorRow">
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#ff1616" }}
+                        onClick={() => setNewColor("#ff1616")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#ff5757" }}
+                        onClick={() => setNewColor("#ff5757")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#ff66c4" }}
+                        onClick={() => setNewColor("#ff66c4")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#cb6ce6" }}
+                        onClick={() => setNewColor("#cb6ce6")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#8c52ff" }}
+                        onClick={() => setNewColor("#8c52ff")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#5e17eb" }}
+                        onClick={() => setNewColor("#5e17eb")}
+                      ></div>
+                    </div>
+                    <div className="colorRow">
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#03989e" }}
+                        onClick={() => setNewColor("#03989e")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#00c2cb" }}
+                        onClick={() => setNewColor("#00c2cb")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#5ce1e6" }}
+                        onClick={() => setNewColor("#5ce1e6")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#38b6ff" }}
+                        onClick={() => setNewColor("#38b6ff")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#5271ff" }}
+                        onClick={() => setNewColor("#5271ff")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#004aad" }}
+                        onClick={() => setNewColor("#004aad")}
+                      ></div>
+                    </div>
+                    <div className="colorRow">
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#008037" }}
+                        onClick={() => setNewColor("#008037")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#7ed957" }}
+                        onClick={() => setNewColor("#7ed957")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#c9e265" }}
+                        onClick={() => setNewColor("#c9e265")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#ffde59" }}
+                        onClick={() => setNewColor("#ffde59")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#ffbd59" }}
+                        onClick={() => setNewColor("#ffbd59")}
+                      ></div>
+                      <div
+                        className="colorCell"
+                        style={{ backgroundColor: "#ff914d" }}
+                        onClick={() => setNewColor("#ff914d")}
+                      ></div>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -347,6 +520,33 @@ function EditorContainer() {
         </div>
         <div className="editorContainerInner">
           <div className="editorContainerInnerNav">
+            <div className="activeObjectSettings">
+              <div className="color"></div>
+
+              {activeObject && activeObject.get("type") === "rect" && (
+                <div
+                  className="changeColor"
+                  style={{
+                    backgroundColor: `${currentObjectColor}`,
+                  }}
+                  onClick={() => setActiveTab("ColorPalette")}
+                ></div>
+              )}
+              {activeObject && activeObject.get("type") === "circle" && (
+                <div
+                  className="changeColor"
+                  style={{
+                    backgroundColor: `${currentObjectColor}`,
+                  }}
+                  onClick={() => setActiveTab("ColorPalette")}
+                ></div>
+              )}
+              {activeObject && activeObject.get("type") === "i-text" && (
+                <div className="fontSize">
+                  28 <span>px</span>
+                </div>
+              )}
+            </div>
             <div className="deleteActiveObjButton" onClick={handleDelete}>
               Delete
             </div>

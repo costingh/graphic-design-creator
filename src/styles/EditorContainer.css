@@ -207,3 +207,37 @@
   font-size: 18px;
   font-weight: 500;
 }
+
+.changeColor {
+  width: 27px;
+  height: 27px;
+  border: 1px solid rgba(34, 34, 34, 0.323);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.colorGrid {
+  width: 100%;
+}
+
+.colorGrid .colorRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.colorGrid .colorRow .colorCell {
+  width: 40.5px;
+  height: 40.5px;
+  border: 2px solid transparent;
+  background-color: red;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.colorGrid .colorRow .colorCell:hover {
+  border: 2px solid #eee;
+}

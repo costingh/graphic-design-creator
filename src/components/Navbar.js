@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Navbar.css";
 
 function Navbar() {
@@ -18,8 +18,6 @@ function Navbar() {
     setOpened1(false);
     setOpened2(true);
   };
-
-  console.log(JSON.parse(localStorage.getItem("loginData")));
 
   return (
     <div className="Navbar">
