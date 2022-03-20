@@ -241,3 +241,53 @@
 .colorGrid .colorRow .colorCell:hover {
   border: 2px solid #eee;
 }
+
+.fontDetails {
+  display: flex;
+  align-items: center;
+  column-gap: 30px;
+}
+
+.fontDetails .box {
+  display: flex;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  color: #222;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.fontDetails .box .left,
+.fontDetails .box .right,
+.fontDetails .box .size {
+  padding: 4px 10px;
+}
+
+.fontDetails .box .left {
+  border-right: 1px solid #ccc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fontDetails .box .right {
+  border-left: 1px solid #ccc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fontFamily {
+  padding: 3px 10px;
+  border-radius: 5px;
+  border: 1px solid #c8d1d9;
+}
+
+.divider {
+  background-color: #c8d1d9;
+  height: 20px;
+  width: 2px;
+}
+
+.alignText {
+  margin-left: 15px;
+  cursor: pointer;
+}

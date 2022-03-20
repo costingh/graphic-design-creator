@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import { fabric } from "fabric";
 
 import Navbar from "../Navbar";
@@ -127,6 +128,14 @@ const DRAWER_CONFIG = [
 ];
 
 let numberOfDrawings = 0;
+// Define an array with all fonts
+let fonts = [
+  "Times New Roman",
+  "Pacifico",
+  "VT323",
+  "Quicksand",
+  "Inconsolata",
+];
 
 function EditorContainer() {
   const [activeTab, setActiveTab] = useState("");
@@ -138,6 +147,10 @@ function EditorContainer() {
   const [mouseUp, setMouseUp] = useState(false);
   const [activeObject, setActiveObject] = useState(null);
   const [currentObjectColor, setCurrentObjectColor] = useState("");
+  const [currentObjectFontSize, setCurrentObjectFontSize] = useState(21);
+  const [currentObjectFontFamily, setCurrentObjectFontFamily] =
+    useState("Times New Roman");
+  const [currentObjectAlign, setCurrentObjectAlign] = useState("left");
 
   useEffect(() => {
     setCanvas(initCanvas());
@@ -201,15 +214,17 @@ function EditorContainer() {
   };
 
   const addText = (canvasRefference, textToAdd, fontSize) => {
-    const text = new fabric.IText(textToAdd, {
+    const text = new fabric.Textbox(textToAdd, {
       left: customWidth / 4,
       top: customHeight / 4,
+      width: 200,
       fontSize: fontSize,
       fill: "#000000",
       hiddenTextarea: null,
+      textAlign: "left",
     });
-    canvasRefference.add(text);
-
+    canvasRefference.add(text).setActiveObject(text);
+    setActiveObject(text);
     canvas.item(numberOfDrawings).set({
       borderColor: "rgb(0, 166, 255)",
       cornerColor: "rgb(6, 137, 208)",
@@ -248,10 +263,18 @@ function EditorContainer() {
 
   useEffect(() => {
     if (activeObject) {
-      /* console.log(activeObject.get("type")); */
-      setCurrentObjectColor(activeObject.fill);
-      console.log(activeObject);
+      if (activeObject?.get("type") === "textbox") {
+        setCurrentObjectFontSize(activeObject.fontSize);
+        setCurrentObjectColor(activeObject.fill);
+        setCurrentObjectFontFamily(activeObject.fontFamily);
+        setCurrentObjectAlign(activeObject.textAlign);
+        setCurrentObjectFontFamily(activeObject.fontFamily);
+      } else {
+        setCurrentObjectColor(activeObject.fill);
+      }
     }
+
+    console.log(activeObject);
   }, [activeObject]);
 
   const setNewColor = (newColor) => {
@@ -262,6 +285,23 @@ function EditorContainer() {
     }
 
     if (canvas) canvas.renderAll();
+  };
+
+  useEffect(() => {
+    if (activeObject && activeObject.get("type") === "textbox") {
+      activeObject.fontSize = currentObjectFontSize;
+      activeObject.fontFamily = currentObjectFontFamily;
+      activeObject.textAlign = currentObjectAlign;
+      activeObject.dirty = true;
+    }
+
+    if (canvas) canvas.renderAll();
+  }, [currentObjectFontSize, currentObjectAlign, currentObjectFontFamily]);
+
+  const alignText = () => {
+    if (currentObjectAlign === "left") setCurrentObjectAlign("center");
+    if (currentObjectAlign === "center") setCurrentObjectAlign("right");
+    if (currentObjectAlign === "right") setCurrentObjectAlign("left");
   };
 
   return (
@@ -541,9 +581,73 @@ function EditorContainer() {
                   onClick={() => setActiveTab("ColorPalette")}
                 ></div>
               )}
-              {activeObject && activeObject.get("type") === "i-text" && (
-                <div className="fontSize">
-                  28 <span>px</span>
+              {activeObject && activeObject.get("type") === "textbox" && (
+                <div className="fontDetails">
+                  <div className="box">
+                    <div
+                      className="left"
+                      onClick={() =>
+                        setCurrentObjectFontSize(currentObjectFontSize - 1)
+                      }
+                    >
+                      -
+                    </div>
+                    <div className="size">{currentObjectFontSize}</div>
+                    <div
+                      className="right"
+                      onClick={() =>
+                        setCurrentObjectFontSize(currentObjectFontSize + 1)
+                      }
+                    >
+                      +
+                    </div>
+                  </div>
+
+                  <div
+                    className="changeColor"
+                    style={{
+                      backgroundColor: `${currentObjectColor}`,
+                    }}
+                    onClick={() => setActiveTab("ColorPalette")}
+                  ></div>
+
+                  <div></div>
+
+                  <select name="cars" id="cars" className="fontFamily">
+                    {fonts.map((f) => (
+                      <option
+                        key={f}
+                        value={f}
+                        onClick={() => setCurrentObjectFontFamily(f)}
+                        selected={f === currentObjectFontFamily ? true : ""}
+                      >
+                        {f}
+                      </option>
+                    ))}
+                  </select>
+
+                  <div className="divider"></div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlnsXlink="http://www.w3.org/1999/xlink"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    className="alignText"
+                    onClick={alignText}
+                  >
+                    <defs>
+                      <path
+                        id="_310417673__a"
+                        d="M3.75 5.25h16.5a.75.75 0 1 1 0 1.5H3.75a.75.75 0 0 1 0-1.5zm0 4h8.5a.75.75 0 1 1 0 1.5h-8.5a.75.75 0 1 1 0-1.5zm0 4h16.5a.75.75 0 1 1 0 1.5H3.75a.75.75 0 1 1 0-1.5zm0 4h8.5a.75.75 0 1 1 0 1.5h-8.5a.75.75 0 1 1 0-1.5z"
+                      ></path>
+                    </defs>
+                    <use
+                      fill="currentColor"
+                      xlinkHref="#_310417673__a"
+                      fillRule="evenodd"
+                    ></use>
+                  </svg>
                 </div>
               )}
             </div>
