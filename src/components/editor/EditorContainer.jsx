@@ -141,8 +141,8 @@ function EditorContainer() {
   const [activeTab, setActiveTab] = useState("");
   const [openDrawer, setOpenDrawer] = useState(false);
   const [canvas, setCanvas] = useState("");
-  const [customHeight, setCustomHeight] = useState(400);
-  const [customWidth, setCustomWidth] = useState(400);
+  const [customHeight, setCustomHeight] = useState(600);
+  const [customWidth, setCustomWidth] = useState(600);
   const [mouseDown, setMouseDown] = useState(false);
   const [mouseUp, setMouseUp] = useState(false);
   const [activeObject, setActiveObject] = useState(null);
@@ -302,6 +302,14 @@ function EditorContainer() {
     if (currentObjectAlign === "left") setCurrentObjectAlign("center");
     if (currentObjectAlign === "center") setCurrentObjectAlign("right");
     if (currentObjectAlign === "right") setCurrentObjectAlign("left");
+  };
+
+  const zoomCanvas = (zoom) => {
+    if (canvas) {
+      canvas.setZoom(zoom);
+      canvas.setWidth(customWidth * canvas.getZoom());
+      canvas.setHeight(customHeight * canvas.getZoom());
+    }
   };
 
   return (
@@ -663,6 +671,13 @@ function EditorContainer() {
               onMouseUp={() => setMouseUp(!mouseUp)}
             >
               <NewDesign canvas={canvas} />
+            </div>
+            <div className="zoomContainer">
+              <div onClick={() => zoomCanvas(0.25)}>25%</div>
+              <div onClick={() => zoomCanvas(0.5)}>50%</div>
+              <div onClick={() => zoomCanvas(0.75)}>75%</div>
+              <div onClick={() => zoomCanvas(1)}>100%</div>
+              <div onClick={() => zoomCanvas(2)}>200%</div>
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@
   width: 100%;
   height: calc(100vh - 80px);
   display: flex;
+  position: relative;
 }
 
 .editorContainerDrawer {
@@ -56,6 +57,7 @@
   top: 50%;
   right: 0;
   transform: translate(19px, -50%);
+  z-index: 10;
 }
 
 .innerDrawer {
@@ -97,6 +99,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .elements {
@@ -290,4 +293,21 @@
 .alignText {
   margin-left: 15px;
   cursor: pointer;
+}
+
+.zoomContainer {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.zoomContainer div {
+  cursor: pointer;
+  color: #18191b;
 }
