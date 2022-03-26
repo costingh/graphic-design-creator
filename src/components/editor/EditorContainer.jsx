@@ -141,8 +141,8 @@ function EditorContainer() {
   const [activeTab, setActiveTab] = useState("");
   const [openDrawer, setOpenDrawer] = useState(false);
   const [canvas, setCanvas] = useState("");
-  const [customHeight, setCustomHeight] = useState(600);
-  const [customWidth, setCustomWidth] = useState(600);
+  const [customHeight, setCustomHeight] = useState(0);
+  const [customWidth, setCustomWidth] = useState(0);
   const [mouseDown, setMouseDown] = useState(false);
   const [mouseUp, setMouseUp] = useState(false);
   const [activeObject, setActiveObject] = useState(null);
@@ -151,10 +151,57 @@ function EditorContainer() {
   const [currentObjectFontFamily, setCurrentObjectFontFamily] =
     useState("Times New Roman");
   const [currentObjectAlign, setCurrentObjectAlign] = useState("left");
+  const [currentDesignID, setCurrentDesignID] = useState(null);
+  const [canvasContent, setCanvasContent] = useState(null);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    setCanvas(initCanvas());
+    // setCanvas(initCanvas());
+
+    const url = window.location.href.split("/");
+    const designId = url[url.length - 1];
+
+    const getDesign = async () => {
+      const res = await fetch(`/api/designs/${designId}`);
+      const data = await res.json();
+      setData(data);
+
+      setCustomHeight(data.design.height);
+      setCustomWidth(data.design.width);
+
+      /* 
+      _id: "623f3cba2a57ee816a4beb4c"​​
+      createdAt: "2022-03-26T16:18:02.708Z"
+      email: "gheorghecostin221@gmail.com"
+      height: 2304
+      json: null
+      name: "Untitled"
+      unit: "px"
+      updatedAt: "2022-03-26T16:18:02.708Z"
+      width: 1728
+      */
+    };
+
+    getDesign();
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      // initialize canvas
+      if (!canvas) setCanvas(initCanvas(data.design.height, data.design.width));
+      else {
+        canvas.loadFromJSON(
+          data.design.json,
+          function () {
+            canvas.renderAll();
+          },
+          function (o, object) {
+            console.log(o, object);
+          }
+        );
+      }
+    }
+  }, [data, canvas]);
 
   const handleOpenDrawer = (itemName) => {
     if (itemName) {
@@ -166,19 +213,19 @@ function EditorContainer() {
     }
   };
 
-  const initCanvas = () =>
+  const initCanvas = (height, width) =>
     new fabric.Canvas("canvas", {
-      height: customHeight,
-      width: customWidth,
+      height: height,
+      width: width,
       backgroundColor: "#eee",
     });
 
   const addRectangle = (canvasRefference) => {
     const rect = new fabric.Rect({
-      left: customWidth / 4,
-      top: customHeight / 4,
-      height: customHeight / 2,
-      width: customWidth / 2,
+      left: customWidth / 2,
+      top: customHeight / 2,
+      height: customHeight / 4,
+      width: customWidth / 4,
       fill: "#c8d1d9",
     });
     canvasRefference.add(rect);
@@ -196,9 +243,9 @@ function EditorContainer() {
 
   const addCircle = (canvasRefference) => {
     const circle = new fabric.Circle({
-      left: customWidth / 4,
-      top: customHeight / 4,
-      radius: Math.min(customHeight / 4, customWidth / 4),
+      left: customWidth / 2,
+      top: customHeight / 2,
+      radius: Math.min(customHeight / 2, customWidth / 2),
       fill: "#c8d1d9",
     });
     canvasRefference.add(circle);
@@ -215,8 +262,8 @@ function EditorContainer() {
 
   const addText = (canvasRefference, textToAdd, fontSize) => {
     const text = new fabric.Textbox(textToAdd, {
-      left: customWidth / 4,
-      top: customHeight / 4,
+      left: customWidth / 2,
+      top: customHeight / 2,
       width: 200,
       fontSize: fontSize,
       fill: "#000000",
@@ -256,9 +303,10 @@ function EditorContainer() {
   };
 
   useEffect(() => {
-    if (canvas) {
+    console.log(canvas);
+    /* if (canvas) {
       setActiveObject(canvas.getActiveObject());
-    }
+    } */
   });
 
   useEffect(() => {
@@ -274,7 +322,7 @@ function EditorContainer() {
       }
     }
 
-    console.log(activeObject);
+    // console.log(activeObject);
   }, [activeObject]);
 
   const setNewColor = (newColor) => {
@@ -309,6 +357,125 @@ function EditorContainer() {
       canvas.setZoom(zoom);
       canvas.setWidth(customWidth * canvas.getZoom());
       canvas.setHeight(customHeight * canvas.getZoom());
+    }
+  };
+
+  const handleSaveDesign = async () => {
+    if (canvas) {
+      let json = JSON.stringify(canvas.toJSON());
+      console.log(json);
+
+      // update design in Database
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: json,
+      };
+
+      const url = window.location.href.split("/");
+      const designId = url[url.length - 1];
+
+      const res = await fetch(`/api/designs/${designId}`, requestOptions);
+
+      console.log(res.status);
+      if (res.status === 200) alert("Design saved successfully");
+      else alert("Design can' t be saved");
+
+      /* let x = {
+        version: "5.2.1",
+        objects: [
+          {
+            type: "rect",
+            version: "5.2.1",
+            originX: "left",
+            originY: "top",
+            left: 606,
+            top: 47,
+            width: 235,
+            height: 197,
+            fill: "#cb6ce6",
+            stroke: null,
+            strokeWidth: 1,
+            strokeDashArray: null,
+            strokeLineCap: "butt",
+            strokeDashOffset: 0,
+            strokeLineJoin: "miter",
+            strokeUniform: false,
+            strokeMiterLimit: 4,
+            scaleX: 1,
+            scaleY: 1,
+            angle: 0,
+            flipX: false,
+            flipY: false,
+            opacity: 1,
+            shadow: null,
+            visible: true,
+            backgroundColor: "",
+            fillRule: "nonzero",
+            paintFirst: "fill",
+            globalCompositeOperation: "source-over",
+            skewX: 0,
+            skewY: 0,
+            rx: 0,
+            ry: 0,
+          },
+          {
+            type: "textbox",
+            version: "5.2.1",
+            originX: "left",
+            originY: "top",
+            left: 352,
+            top: 66,
+            width: 200,
+            height: 23.73,
+            fill: "#000000",
+            stroke: null,
+            strokeWidth: 1,
+            strokeDashArray: null,
+            strokeLineCap: "butt",
+            strokeDashOffset: 0,
+            strokeLineJoin: "miter",
+            strokeUniform: false,
+            strokeMiterLimit: 4,
+            scaleX: 1,
+            scaleY: 1,
+            angle: 0,
+            flipX: false,
+            flipY: false,
+            opacity: 1,
+            shadow: null,
+            visible: true,
+            backgroundColor: "",
+            fillRule: "nonzero",
+            paintFirst: "fill",
+            globalCompositeOperation: "source-over",
+            skewX: 0,
+            skewY: 0,
+            fontFamily: "Times New Roman",
+            fontWeight: "normal",
+            fontSize: 21,
+            text: "Adauga un subtitlu",
+            underline: false,
+            overline: false,
+            linethrough: false,
+            textAlign: "left",
+            fontStyle: "normal",
+            lineHeight: 1.16,
+            textBackgroundColor: "",
+            charSpacing: 0,
+            styles: {},
+            direction: "ltr",
+            path: null,
+            pathStartOffset: 0,
+            pathSide: "left",
+            pathAlign: "baseline",
+            minWidth: 20,
+            splitByGrapheme: false,
+          },
+        ],
+        background: "#eee",
+      }; */
+      // send json to database
     }
   };
 
@@ -659,8 +826,13 @@ function EditorContainer() {
                 </div>
               )}
             </div>
-            <div className="deleteActiveObjButton" onClick={handleDelete}>
-              Delete
+            <div style={{ display: "flex", columnGap: "20px" }}>
+              <div className="deleteActiveObjButton" onClick={handleSaveDesign}>
+                Save
+              </div>
+              <div className="deleteActiveObjButton" onClick={handleDelete}>
+                Delete
+              </div>
             </div>
           </div>
           <div className="editorContainerInnerForeground">

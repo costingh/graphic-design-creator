@@ -13,7 +13,7 @@ function App() {
           <Route path="/dashboard">
             <Dashboard />
           </Route>
-          <Route path="/design">
+          <Route path="/design/">
             <EditorContainer />
           </Route>
           <Route path="/">

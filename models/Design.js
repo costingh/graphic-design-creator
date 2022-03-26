@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const DesignSchema = new mongoose.Schema(
   {
-    userId: {
+    email: {
       type: String,
       required: true,
     },
@@ -11,7 +11,16 @@ const DesignSchema = new mongoose.Schema(
       max: 500,
     },
     json: {
-      type: Object,
+      type: String,
+    },
+    width: {
+      type: Number,
+    },
+    height: {
+      type: Number,
+    },
+    unit: {
+      type: String,
     },
   },
   { timestamps: true }

@@ -100,6 +100,9 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow-y: auto;
+  padding-top: 300px;
+  padding-bottom: 150px;
 }
 
 .elements {
@@ -296,7 +299,7 @@
 }
 
 .zoomContainer {
-  position: absolute;
+  position: fixed;
   right: 20px;
   bottom: 20px;
   display: flex;

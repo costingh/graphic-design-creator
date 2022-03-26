@@ -3,16 +3,65 @@ const router = express();
 const Design = require("../models/Design");
 
 // create a design
-router.post("/:width/:height", async (req, res) => {
-  const newDesign = new Design(req.body);
+router.post("/:width/:height/:unit", async (req, res) => {
+  // create design config
+  // if the unit is in inches and needs to be converted to pixels
+  const designConfig = {
+    width: req.params.unit === "px" ? req.params.width : req.params.width * 96,
+    height:
+      req.params.unit === "px" ? req.params.height : req.params.height * 96,
+    unit: "px",
+    email: req.body.email,
+    name: req.body.name,
+    json: req.body.json,
+  };
+
+  const newDesign = new Design(designConfig);
 
   try {
     const savedDesign = await newDesign.save();
-    res.status(200).json(savedDesign);
+    res.json({
+      ...savedDesign,
+      id: savedDesign._id,
+      status: 200,
+    });
+  } catch (err) {
+    res.json({
+      error: err,
+      status: 500,
+    });
+  }
+});
+
+// get a design
+router.get("/:id", async (req, res) => {
+  try {
+    const design = await Design.findById(req.params.id);
+    res.json({
+      design: design,
+      status: 200,
+    });
+  } catch (err) {
+    res.json({
+      error: err,
+      status: 500,
+    });
+  }
+});
+
+//update a design
+router.put("/:id", async (req, res) => {
+  /* console.log(JSON.stringify(req.body)); */
+  try {
+    const design = await Design.findById(req.params.id);
+    await design.updateOne({ $set: { json: JSON.stringify(req.body) } });
+
+    res.status(200).json("The design has been updated");
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
 /* 
 //update a design
 router.put('/:id', async(req, res) =>{
