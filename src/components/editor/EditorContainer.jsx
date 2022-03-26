@@ -190,15 +190,17 @@ function EditorContainer() {
       // initialize canvas
       if (!canvas) setCanvas(initCanvas(data.design.height, data.design.width));
       else {
-        canvas.loadFromJSON(
-          data.design.json,
-          function () {
-            canvas.renderAll();
-          },
-          function (o, object) {
-            console.log(o, object);
-          }
-        );
+        if (data.design.json) {
+          canvas.loadFromJSON(
+            data.design.json,
+            function () {
+              canvas.renderAll();
+            },
+            function (o, object) {
+              console.log(o, object);
+            }
+          );
+        }
       }
     }
   }, [data, canvas]);
@@ -297,16 +299,14 @@ function EditorContainer() {
     if (mouseDown && !mouseUp) {
       if (e.target.className === "canvasWrapper") {
         e.target.style.cursor = "e-resize";
-        /*  console.log(e.clientX); */
       }
     }
   };
 
   useEffect(() => {
-    console.log(canvas);
-    /* if (canvas) {
+    if (canvas) {
       setActiveObject(canvas.getActiveObject());
-    } */
+    }
   });
 
   useEffect(() => {
@@ -321,8 +321,6 @@ function EditorContainer() {
         setCurrentObjectColor(activeObject.fill);
       }
     }
-
-    // console.log(activeObject);
   }, [activeObject]);
 
   const setNewColor = (newColor) => {
