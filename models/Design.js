@@ -10,6 +10,9 @@ const DesignSchema = new mongoose.Schema(
       type: String,
       max: 500,
     },
+    json: {
+      type: Object,
+    },
   },
   { timestamps: true }
 );

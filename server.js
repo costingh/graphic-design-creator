@@ -7,6 +7,9 @@ const User = require("./models/User");
 const mongoose = require("mongoose");
 const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
 
+// routes
+const designRoutes = require("./routes/designs");
+
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -60,6 +63,9 @@ app.post("/api/google-login", async (req, res) => {
   res.status(201);
   res.json({ name, email, picture });
 });
+
+// routes
+app.use("/api/designs", designRoutes);
 
 app.use(express.static(path.join(__dirname, "/build")));
 app.get("*", (req, res) =>
