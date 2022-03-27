@@ -314,3 +314,8 @@
   cursor: pointer;
   color: #18191b;
 }
+
+.hideScorllbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

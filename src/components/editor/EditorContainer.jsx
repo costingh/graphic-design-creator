@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { fabric } from "fabric";
+import { createApi } from "unsplash-js";
 
 import Navbar from "../Navbar";
 import NewDesign from "../NewDesign";
@@ -154,6 +155,8 @@ function EditorContainer() {
   const [currentDesignID, setCurrentDesignID] = useState(null);
   const [canvasContent, setCanvasContent] = useState(null);
   const [data, setData] = useState(null);
+  const [images, setImages] = useState([]);
+  const [inputValue, setInputvalue] = useState("");
 
   useEffect(() => {
     // setCanvas(initCanvas());
@@ -184,6 +187,48 @@ function EditorContainer() {
 
     getDesign();
   }, []);
+
+  const saveFile = async (blob) => {
+    const a = document.createElement("a");
+    a.download = "my-file.txt";
+    a.href = URL.createObjectURL(blob);
+    a.addEventListener("click", (e) => {
+      setTimeout(() => URL.revokeObjectURL(a.href), 30 * 1000);
+    });
+    a.click();
+  };
+
+  const fetchImages = () => {
+    const unsplash = createApi({
+      accessKey: process.env.REACT_APP_UNSPLASH_ACCESS_KEY,
+    });
+
+    unsplash.search
+      .getPhotos({
+        query: inputValue,
+        page: 1,
+        perPage: 10,
+      })
+      .then((result) => {
+        if (result.errors) {
+          // handle error here
+          console.log("error occurred: ", result.errors[0]);
+        } else {
+          const feed = result.response;
+
+          // extract total and results array from response
+          const { total, results } = feed;
+          setImages(results);
+          /* const blob = new Blob([JSON.stringify(feed, null, 2)], {
+            type: "application/json",
+          });
+          saveFile(blob); */
+          // handle success here
+          console.log(`received ${results.length} photos out of ${total}`);
+          console.log("first photo: ", results[0]);
+        }
+      });
+  };
 
   useEffect(() => {
     if (data) {
@@ -477,6 +522,10 @@ function EditorContainer() {
     }
   };
 
+  const handleImageQueryChange = (e) => {
+    setInputvalue(e.target.value);
+  };
+
   return (
     <div className="editorContainer">
       <Navbar />
@@ -538,6 +587,74 @@ function EditorContainer() {
                     onClick={() => addText(canvas, "Adauga un comentariu", 15)}
                   >
                     Adauga un comentariu
+                  </div>
+                </div>
+              )}
+              {activeTab === "Photos" && (
+                <div className="elements" style={{ position: "relative" }}>
+                  <h1>Imagini</h1>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderRadius: "5px",
+                      border: "1px solid #000",
+                      padding: "4px 15px",
+                    }}
+                  >
+                    <input
+                      type="text"
+                      placeholder="Search Images"
+                      style={{
+                        width: "100%",
+                        background: "transparent",
+                        appearance: "none",
+                        border: "none",
+                        color: "#ccc",
+                        fontSize: "15px",
+                        outline: "none",
+                      }}
+                      onChange={(e) => handleImageQueryChange(e)}
+                    />
+                    <div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="#ccc"
+                        style={{ cursor: "pointer" }}
+                        onClick={fetchImages}
+                      >
+                        <path d="M23.809 21.646l-6.205-6.205c1.167-1.605 1.857-3.579 1.857-5.711 0-5.365-4.365-9.73-9.731-9.73-5.365 0-9.73 4.365-9.73 9.73 0 5.366 4.365 9.73 9.73 9.73 2.034 0 3.923-.627 5.487-1.698l6.238 6.238 2.354-2.354zm-20.955-11.916c0-3.792 3.085-6.877 6.877-6.877s6.877 3.085 6.877 6.877-3.085 6.877-6.877 6.877c-3.793 0-6.877-3.085-6.877-6.877z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div
+                    className="hideScorllbar"
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      columnGap: "20px",
+                      alignItems: "flex-start",
+                      justifyContent: "flex-start",
+                      padding: "40px 0px",
+                      overflowY: "auto",
+                      height: "calc(100% - 23px - 35px)",
+                      position: "relative",
+                    }}
+                  >
+                    {images &&
+                      images.map((feedItem) => (
+                        <div key={feedItem.id}>
+                          <img
+                            src={feedItem.urls.thumb}
+                            alt={feedItem.alt_description}
+                            style={{ width: "150px", cursor: "pointer" }}
+                          />
+                        </div>
+                      ))}
                   </div>
                 </div>
               )}
