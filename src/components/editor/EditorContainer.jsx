@@ -277,13 +277,13 @@ function EditorContainer() {
     });
     canvasRefference.add(rect);
 
-    canvas.item(numberOfDrawings).set({
+    /* canvas.item(numberOfDrawings).set({
       borderColor: "rgb(0, 166, 255)",
       cornerColor: "rgb(6, 137, 208)",
       cornerSize: 6,
       transparentCorners: false,
     });
-    numberOfDrawings += 1;
+    numberOfDrawings += 1; */
 
     canvasRefference.renderAll();
   };
@@ -296,13 +296,13 @@ function EditorContainer() {
       fill: "#c8d1d9",
     });
     canvasRefference.add(circle);
-    canvas.item(numberOfDrawings).set({
+    /* canvas.item(numberOfDrawings).set({
       borderColor: "rgb(0, 166, 255)",
       cornerColor: "rgb(6, 137, 208)",
       cornerSize: 6,
       transparentCorners: false,
     });
-    numberOfDrawings += 1;
+    numberOfDrawings += 1; */
 
     canvasRefference.renderAll();
   };
@@ -319,13 +319,13 @@ function EditorContainer() {
     });
     canvasRefference.add(text).setActiveObject(text);
     setActiveObject(text);
-    canvas.item(numberOfDrawings).set({
+    /* canvas.item(numberOfDrawings).set({
       borderColor: "rgb(0, 166, 255)",
       cornerColor: "rgb(6, 137, 208)",
       cornerSize: 6,
       transparentCorners: false,
     });
-    numberOfDrawings += 1;
+    numberOfDrawings += 1; */
 
     canvasRefference.renderAll();
   };
@@ -526,6 +526,29 @@ function EditorContainer() {
     setInputvalue(e.target.value);
   };
 
+  const handleAddImageOnCanvas = (item) => {
+    console.log(item);
+    addImage(item.urls.small);
+  };
+
+  const addImage = (url) => {
+    fabric.Image.fromURL(url, function (oImg) {
+      // scale image down, and flip it, before adding it onto canvas
+      // oImg.scale(0.5).set('flipX', true);
+      canvas.add(oImg);
+    });
+
+    /* canvas.item(numberOfDrawings).set({
+      borderColor: "rgb(0, 166, 255)",
+      cornerColor: "rgb(6, 137, 208)",
+      cornerSize: 6,
+      transparentCorners: false,
+    });
+    numberOfDrawings += 1; */
+
+    canvas.renderAll();
+  };
+
   return (
     <div className="editorContainer">
       <Navbar />
@@ -652,6 +675,7 @@ function EditorContainer() {
                             src={feedItem.urls.thumb}
                             alt={feedItem.alt_description}
                             style={{ width: "150px", cursor: "pointer" }}
+                            onClick={() => handleAddImageOnCanvas(feedItem)}
                           />
                         </div>
                       ))}
