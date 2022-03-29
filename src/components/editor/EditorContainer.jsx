@@ -273,8 +273,8 @@ function EditorContainer() {
     const rect = new fabric.Rect({
       left: customWidth / 2,
       top: customHeight / 2,
-      height: customHeight / 4,
-      width: customWidth / 4,
+      height: 150,
+      width: 150,
       fill: "#c8d1d9",
     });
     canvasRefference.add(rect);
@@ -287,6 +287,21 @@ function EditorContainer() {
     });
     numberOfDrawings += 1; */
 
+    canvasRefference.renderAll();
+  };
+
+  const addRoundedRectangle = (canvasRefference) => {
+    const rect = new fabric.Rect({
+      fill: "#c8d1d9",
+      left: customWidth / 2,
+      top: customHeight / 2,
+      width: 150,
+      height: 150,
+      rx: 15,
+      ry: 15,
+      objectCaching: false,
+    });
+    canvasRefference.add(rect);
     canvasRefference.renderAll();
   };
 
@@ -585,7 +600,7 @@ function EditorContainer() {
                     </div>
                     <div
                       className="element"
-                      onClick={() => addRectangle(canvas)}
+                      onClick={() => addRoundedRectangle(canvas)}
                     >
                       <div className="roundedBorderSquare"></div>
                     </div>

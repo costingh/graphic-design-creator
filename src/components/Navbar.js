@@ -98,7 +98,13 @@ function Navbar() {
 
   return (
     <div className="Navbar">
-      <div>Navbar</div>
+      <div
+        onClick={() => {
+          window.location.href = "/dashboard";
+        }}
+      >
+        Home
+      </div>
       <div className="right">
         <div className="button" onClick={handleOpenMenu}>
           Create Design
