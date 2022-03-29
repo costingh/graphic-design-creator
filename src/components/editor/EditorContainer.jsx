@@ -6,6 +6,8 @@ import { createApi } from "unsplash-js";
 import Navbar from "../Navbar";
 import NewDesign from "../NewDesign";
 
+import imagesFromUnsplashMockup from "../../utils/utils";
+
 import "../../styles/EditorContainer.css";
 
 const DRAWER_CONFIG = [
@@ -155,7 +157,7 @@ function EditorContainer() {
   const [currentDesignID, setCurrentDesignID] = useState(null);
   const [canvasContent, setCanvasContent] = useState(null);
   const [data, setData] = useState(null);
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState(imagesFromUnsplashMockup);
   const [inputValue, setInputvalue] = useState("");
 
   useEffect(() => {
