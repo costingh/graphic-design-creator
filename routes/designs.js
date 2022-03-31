@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express();
 const Design = require("../models/Design");
+const User = require("../models/User");
 
 // create a design
 router.post("/:width/:height/:unit", async (req, res) => {
@@ -14,6 +15,7 @@ router.post("/:width/:height/:unit", async (req, res) => {
     email: req.body.email,
     name: req.body.name,
     json: req.body.json,
+    isDeleted: false,
   };
 
   const newDesign = new Design(designConfig);
@@ -67,6 +69,18 @@ router.get("/getDesigns/:email", async (req, res) => {
   try {
     const designs = await Design.find({ email: req.params.email });
     res.status(200).json(designs);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// delete a design (move it in trash)
+router.put("/delete-design/:id", async (req, res) => {
+  try {
+    const design = await Design.findById(req.params.id);
+    await design.updateOne({ $set: { isDeleted: true } });
+
+    res.status(200).json("The design has been moved to trash");
   } catch (err) {
     res.status(500).json(err);
   }

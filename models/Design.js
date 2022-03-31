@@ -22,6 +22,9 @@ const DesignSchema = new mongoose.Schema(
     unit: {
       type: String,
     },
+    isDeleted: {
+      type: Boolean,
+    },
   },
   { timestamps: true }
 );
