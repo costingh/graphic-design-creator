@@ -319,3 +319,14 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.ActiveObjIndexContainer {
+  display: flex;
+  align-items: center;
+  column-gap: 30px;
+  height: 35px;
+}
+
+.ActiveObjIndexContainer svg {
+  cursor: pointer;
+}
