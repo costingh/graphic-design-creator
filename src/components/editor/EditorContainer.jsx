@@ -943,7 +943,10 @@ function EditorContainer() {
                   style={{
                     backgroundColor: `${currentObjectColor}`,
                   }}
-                  onClick={() => setActiveTab("ColorPalette")}
+                  onClick={() => {
+                    setActiveTab("ColorPalette");
+                    setOpenDrawer(true);
+                  }}
                 ></div>
               )}
               {activeObject && activeObject.get("type") === "circle" && (
@@ -952,7 +955,10 @@ function EditorContainer() {
                   style={{
                     backgroundColor: `${currentObjectColor}`,
                   }}
-                  onClick={() => setActiveTab("ColorPalette")}
+                  onClick={() => {
+                    setActiveTab("ColorPalette");
+                    setOpenDrawer(true);
+                  }}
                 ></div>
               )}
               {activeObject && activeObject.get("type") === "textbox" && (
