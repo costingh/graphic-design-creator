@@ -141,6 +141,12 @@ let fonts = [
 ];
 
 function EditorContainer() {
+  const [loginData, setLoginData] = useState(
+    localStorage.getItem("loginData")
+      ? JSON.parse(localStorage.getItem("loginData"))
+      : null
+  );
+
   const [activeTab, setActiveTab] = useState("");
   const [openDrawer, setOpenDrawer] = useState(false);
   const [canvas, setCanvas] = useState("");
@@ -159,32 +165,22 @@ function EditorContainer() {
   const [data, setData] = useState(null);
   const [images, setImages] = useState(imagesFromUnsplashMockup);
   const [inputValue, setInputvalue] = useState("");
+  const [uploadedImages, setUploadedImages] = useState([]);
+  const [showUploadImage, setShowUploadImage] = useState(false);
 
   useEffect(() => {
     // setCanvas(initCanvas());
 
     const url = window.location.href.split("/");
     const designId = url[url.length - 1];
-
+    setCurrentDesignID(designId);
     const getDesign = async () => {
       const res = await fetch(`/api/designs/${designId}`);
       const data = await res.json();
       setData(data);
 
-      setCustomHeight(data.design.height);
-      setCustomWidth(data.design.width);
-
-      /* 
-      _id: "623f3cba2a57ee816a4beb4c"​​
-      createdAt: "2022-03-26T16:18:02.708Z"
-      email: "gheorghecostin221@gmail.com"
-      height: 2304
-      json: null
-      name: "Untitled"
-      unit: "px"
-      updatedAt: "2022-03-26T16:18:02.708Z"
-      width: 1728
-      */
+      setCustomHeight(data?.design?.height);
+      setCustomWidth(data?.design?.width);
     };
 
     getDesign();
@@ -386,6 +382,34 @@ function EditorContainer() {
       }
     }
   }, [activeObject]);
+
+  useEffect(() => {
+    if (activeTab === "Uploads") {
+      const getAllUploadedImagesOfAuthedUser = async () => {
+        const res = await fetch(`/api/images/retrieve/${loginData.email}`);
+        const data = await res.json();
+        let images = [];
+
+        data.images.map((img) => {
+          let b64encoded = btoa(
+            String.fromCharCode.apply(null, img.img.data.data)
+          );
+          let datajpg = "data:image/jpg;base64," + b64encoded;
+
+          images.push({
+            _id: img._id,
+            url: datajpg,
+          });
+        });
+
+        console.log(images);
+
+        setUploadedImages(images);
+      };
+
+      if (loginData) getAllUploadedImagesOfAuthedUser();
+    }
+  }, [activeTab, loginData]);
 
   const setNewColor = (newColor) => {
     setCurrentObjectColor(newColor);
@@ -609,6 +633,18 @@ function EditorContainer() {
     });
   }
 
+  const handleImageDelete = (id) => {
+    fetch("/api/images/delete/" + id, {
+      method: "DELETE",
+    })
+      .then((res) => res.json()) // or res.json()
+      .then((res) => {
+        if (res.message === "Image was deleted successfully!") {
+          setUploadedImages(uploadedImages.filter((img) => img._id !== id));
+        } else alert("Error when deleting this image!");
+      });
+  };
+
   return (
     <div className="editorContainer">
       <Navbar />
@@ -671,6 +707,165 @@ function EditorContainer() {
                   >
                     Adauga un comentariu
                   </div>
+                </div>
+              )}
+              {activeTab === "Uploads" && (
+                <div className="elements" style={{ position: "relative" }}>
+                  <h1>Imaginile dumneavoastra</h1>
+                  <div
+                    className="uploadImageBtn"
+                    onClick={() => setShowUploadImage(true)}
+                  >
+                    Incarcati o imagine
+                  </div>
+                  {showUploadImage ? (
+                    <form
+                      className="imageUploadArea"
+                      action="/api/images/store"
+                      method="POST"
+                      enctype="multipart/form-data"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <input
+                        style={{ display: "none" }}
+                        type="text"
+                        id="email"
+                        placeholder="Email"
+                        value={loginData?.email}
+                        name="email"
+                      />
+
+                      <input
+                        style={{ display: "none" }}
+                        type="text"
+                        id="redirect"
+                        placeholder="redirect"
+                        value={`/design/${currentDesignID}`}
+                        name="redirect"
+                      />
+
+                      <label
+                        for="image"
+                        className="imageLabel"
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          rowGap: "50px",
+                        }}
+                      >
+                        <svg
+                          width="24"
+                          height="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          style={{ margin: "0 auto", transform: "scale(3)" }}
+                        >
+                          <path d="M9 16h-8v6h22v-6h-8v-1h9v8h-24v-8h9v1zm11 2c.552 0 1 .448 1 1s-.448 1-1 1-1-.448-1-1 .448-1 1-1zm-7.5 0h-1v-14.883l-4.735 5.732-.765-.644 6.021-7.205 5.979 7.195-.764.645-4.736-5.724v14.884z" />
+                        </svg>
+
+                        <input
+                          type="file"
+                          id="image"
+                          name="image"
+                          defaultValue=""
+                          required
+                        />
+                      </label>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          columnGap: "30px",
+                        }}
+                      >
+                        <button
+                          type="submit"
+                          style={{ background: "#ccc", color: "#222" }}
+                        >
+                          Submit
+                        </button>
+                        <div
+                          style={{
+                            border: "1px solid #ccc",
+                            padding: "6px 25px",
+                            borderRadius: "10px",
+                            fontSize: "15px",
+                            cursor: "pointer",
+                            color: "#ccc",
+                          }}
+                          onClick={() => setShowUploadImage(false)}
+                        >
+                          Close
+                        </div>
+                      </div>
+                    </form>
+                  ) : (
+                    <div
+                      className="hideScorllbar"
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        columnGap: "20px",
+                        alignItems: "flex-start",
+                        justifyContent: "flex-start",
+                        padding: "40px 0px",
+                        overflowY: "auto",
+                        height: "calc(100% - 23px - 35px)",
+                        position: "relative",
+                      }}
+                    >
+                      {uploadedImages.map((i) => (
+                        <div
+                          key={i._id}
+                          style={{ position: "relative" }}
+                          className="overlayImg"
+                        >
+                          <img
+                            src={i.url}
+                            alt=""
+                            style={{ width: "150px", cursor: "pointer" }}
+                            onClick={() => addImage(i.url)}
+                          />
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "10px",
+                              right: "10px",
+                              background: "#aaa",
+                              width: "30px",
+                              height: "30px",
+                              borderRadius: "5px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              cursor: "pointer",
+                              zIndex: -1,
+                            }}
+                            onClick={() => handleImageDelete(i._id)}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="#222"
+                              style={{ transform: "scale(0.8)" }}
+                            >
+                              <path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 16.538l-4.592-4.548 4.546-4.587-1.416-1.403-4.545 4.589-4.588-4.543-1.405 1.405 4.593 4.552-4.547 4.592 1.405 1.405 4.555-4.596 4.591 4.55 1.403-1.416z" />
+                            </svg>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
               {activeTab === "Photos" && (

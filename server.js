@@ -9,6 +9,7 @@ const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
 
 // routes
 const designRoutes = require("./routes/designs");
+const imageRoutes = require("./routes/images");
 
 dotenv.config();
 const app = express();
@@ -66,11 +67,12 @@ app.post("/api/google-login", async (req, res) => {
 
 // routes
 app.use("/api/designs", designRoutes);
+app.use("/api/images", imageRoutes);
 
-app.use(express.static(path.join(__dirname, "/build")));
+/* app.use(express.static(path.join(__dirname, "/build")));
 app.get("*", (req, res) =>
   res.sendFile(path.join(__dirname, "/build/index.html"))
-);
+); */
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(

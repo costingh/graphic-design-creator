@@ -330,3 +330,17 @@
 .ActiveObjIndexContainer svg {
   cursor: pointer;
 }
+
+.uploadImageBtn {
+  width: 100%;
+  padding: 10px 30px;
+  color: #e1e1e1;
+  background-color: rgb(142, 9, 142);
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.overlayImg:hover div {
+  z-index: 1 !important;
+}
