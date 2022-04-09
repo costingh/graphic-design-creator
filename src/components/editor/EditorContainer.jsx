@@ -578,6 +578,13 @@ function EditorContainer() {
     fabric.Image.fromURL(url, function (oImg) {
       // scale image down, and flip it, before adding it onto canvas
       // oImg.scale(0.5).set('flipX', true);
+      oImg.scale(0.5).set({
+        clipPath: new fabric.Circle({
+          radius: 300,
+          originX: "center",
+          originY: "center",
+        }),
+      });
       canvas.add(oImg);
     });
 
@@ -643,6 +650,26 @@ function EditorContainer() {
           setUploadedImages(uploadedImages.filter((img) => img._id !== id));
         } else alert("Error when deleting this image!");
       });
+  };
+
+  const [downloadOpened, setDownloadOpened] = useState(false);
+
+  const downloadDesign = (fileType) => {
+    if (canvas) {
+      const dataURL = canvas.toDataURL({
+        width: canvas.width,
+        height: canvas.height,
+        left: 0,
+        top: 0,
+        format: fileType === "PNG" ? "png" : "jpeg",
+      });
+      const link = document.createElement("a");
+      link.download = "image.png";
+      link.href = dataURL;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   };
 
   return (
@@ -1260,6 +1287,64 @@ function EditorContainer() {
               </div>
               <div className="deleteActiveObjButton" onClick={handleDelete}>
                 Delete
+              </div>
+              <div style={{ position: "relative" }}>
+                <div
+                  className="btn"
+                  onClick={() => setDownloadOpened(!downloadOpened)}
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                  >
+                    <path d="M11.5 8h1v7.826l2.5-3.076.753.665-3.753 4.585-3.737-4.559.737-.677 2.5 3.064v-7.828zm7 12h-13c-2.481 0-4.5-2.019-4.5-4.5 0-2.178 1.555-4.038 3.698-4.424l.779-.14.043-.79c.185-3.447 3.031-6.146 6.48-6.146 3.449 0 6.295 2.699 6.479 6.146l.043.79.78.14c2.142.386 3.698 2.246 3.698 4.424 0 2.481-2.019 4.5-4.5 4.5m.979-9.908c-.212-3.951-3.473-7.092-7.479-7.092s-7.267 3.141-7.479 7.092c-2.57.463-4.521 2.706-4.521 5.408 0 3.037 2.463 5.5 5.5 5.5h13c3.037 0 5.5-2.463 5.5-5.5 0-2.702-1.951-4.945-4.521-5.408" />
+                  </svg>
+                  <p>Download</p>
+                </div>
+                {downloadOpened && (
+                  <div className="downloadOpened">
+                    <p>Tip fisier</p>
+                    <div
+                      className="fileTypeOption"
+                      onClick={() => downloadDesign("PNG")}
+                    >
+                      <svg
+                        width="24"
+                        height="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                      >
+                        <path d="M24 22h-24v-20h24v20zm-1-19h-22v18h22v-18zm-1 16h-19l4-7.492 3 3.048 5.013-7.556 6.987 12zm-11.848-2.865l-2.91-2.956-2.574 4.821h15.593l-5.303-9.108-4.806 7.243zm-4.652-11.135c1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5-2.5 2.5-2.5-1.12-2.5-2.5 1.12-2.5 2.5-2.5zm0 1c.828 0 1.5.672 1.5 1.5s-.672 1.5-1.5 1.5-1.5-.672-1.5-1.5.672-1.5 1.5-1.5z" />
+                      </svg>
+                      <div>
+                        <p>PNG</p>
+                        <p>High quality image</p>
+                      </div>
+                    </div>
+                    <div
+                      className="fileTypeOption"
+                      onClick={() => downloadDesign("JPG")}
+                    >
+                      <svg
+                        width="24"
+                        height="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                      >
+                        <path d="M24 22h-24v-20h24v20zm-1-19h-22v18h22v-18zm-1 16h-19l4-7.492 3 3.048 5.013-7.556 6.987 12zm-11.848-2.865l-2.91-2.956-2.574 4.821h15.593l-5.303-9.108-4.806 7.243zm-4.652-11.135c1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5-2.5 2.5-2.5-1.12-2.5-2.5 1.12-2.5 2.5-2.5zm0 1c.828 0 1.5.672 1.5 1.5s-.672 1.5-1.5 1.5-1.5-.672-1.5-1.5.672-1.5 1.5-1.5z" />
+                      </svg>
+                      <div>
+                        <p>JPG</p>
+                        <p>Image with low file size</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

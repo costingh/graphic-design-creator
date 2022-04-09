@@ -344,3 +344,63 @@
 .overlayImg:hover div {
   z-index: 1 !important;
 }
+
+.btn {
+  margin-left: auto;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color:  #18191b;
+  color: #e1e1e1;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.4px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 10px;
+  fill: #e1e1e1;
+}
+
+.downloadOpened {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: #fff;
+  z-index: 10;
+  width: 250px;
+  border-radius: 5px;
+}
+
+.fileTypeOption {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  column-gap: 15px;
+  padding: 10px 25px;
+  transition: all .2s ease;
+  cursor: pointer;
+}
+
+.fileTypeOption p:first-child {
+  font-weight: 400;
+  letter-spacing: .4px;
+}
+
+.fileTypeOption p:nth-child(2) {
+  font-weight: 300;
+  font-size: 13px;
+  color: #424446;
+}
+
+.fileTypeOption:hover {
+  background-color: #F2F3F5;
+}
+
+.downloadOpened > p {
+  margin-top: 25px;
+  margin-left: 25px;
+  color: #343537;
+  font-size: 14px;
+}
