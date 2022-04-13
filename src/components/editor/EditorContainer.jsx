@@ -265,6 +265,8 @@ function EditorContainer() {
       backgroundColor: "#eee",
       preserveObjectStacking: true,
       selectionLineWidth: 2,
+      cornerColor: "#00d9e1",
+      borderColor: "#00d9e1",
     });
 
   const addRectangle = (canvasRefference) => {
@@ -274,6 +276,8 @@ function EditorContainer() {
       height: 150,
       width: 150,
       fill: "#c8d1d9",
+      cornerColor: "#00d9e1",
+      borderColor: "#00d9e1",
     });
     canvasRefference.add(rect);
 
@@ -298,6 +302,8 @@ function EditorContainer() {
       rx: 15,
       ry: 15,
       objectCaching: false,
+      cornerColor: "#00d9e1",
+      borderColor: "#00d9e1",
     });
     canvasRefference.add(rect);
     canvasRefference.renderAll();
@@ -309,6 +315,8 @@ function EditorContainer() {
       top: customHeight / 2,
       radius: Math.min(customHeight / 2, customWidth / 2),
       fill: "#c8d1d9",
+      cornerColor: "#00d9e1",
+      borderColor: "#00d9e1",
     });
     canvasRefference.add(circle);
     /* canvas.item(numberOfDrawings).set({
@@ -331,6 +339,8 @@ function EditorContainer() {
       fill: "#000000",
       hiddenTextarea: null,
       textAlign: "left",
+      cornerColor: "#00d9e1",
+      borderColor: "#00d9e1",
     });
     canvasRefference.add(text).setActiveObject(text);
     setActiveObject(text);
@@ -583,6 +593,8 @@ function EditorContainer() {
           radius: 300,
           originX: "center",
           originY: "center",
+          cornerColor: "#00d9e1",
+          borderColor: "#00d9e1",
         }),
       });
       canvas.add(oImg);
@@ -672,6 +684,67 @@ function EditorContainer() {
     }
   };
 
+  /* drawing shapes */
+  const regularPolygonPoints = (sideCount, radius) => {
+    let sweep = (Math.PI * 2) / sideCount;
+    let cx = radius;
+    let cy = radius;
+    let points = [];
+    for (let i = 0; i < sideCount; i++) {
+      let x = cx + radius * Math.cos(i * sweep);
+      let y = cy + radius * Math.sin(i * sweep);
+      points.push({ x: x, y: y });
+    }
+    return points;
+  };
+
+  const starPolygonPoints = (spikeCount, outerRadius, innerRadius) => {
+    let rot = (Math.PI / 2) * 3;
+    let cx = outerRadius;
+    let cy = outerRadius;
+    let sweep = Math.PI / spikeCount;
+    let points = [];
+    let angle = 0;
+
+    for (let i = 0; i < spikeCount; i++) {
+      let x = cx + Math.cos(angle) * outerRadius;
+      let y = cy + Math.sin(angle) * outerRadius;
+      points.push({ x: x, y: y });
+      angle += sweep;
+
+      x = cx + Math.cos(angle) * innerRadius;
+      y = cy + Math.sin(angle) * innerRadius;
+      points.push({ x: x, y: y });
+      angle += sweep;
+    }
+    return points;
+  };
+
+  const drawGeometricShape = (shapeName) => {
+    let svgPath = "";
+    if (shapeName === "hexagon") {
+      svgPath = "M366.3,0H122.1L0,211.5L122.1,423h244.2l122.1-211.5L366.3,0z";
+    } else if (shapeName === "star") {
+      svgPath =
+        "M71.9 1.3l19.7 40c.3.7 1 1.2 1.8 1.3l44.1 6.4c1.9.3 2.7 2.7 1.3 4l-31.9 31.1c-.6.5-.8 1.3-.7 2.1l7.5 44c.3 1.9-1.7 3.4-3.4 2.5l-39.5-20.8c-.7-.4-1.5-.4-2.2 0l-39.5 20.8c-1.7.9-3.7-.6-3.4-2.5l7.5-44c.1-.8-.1-1.5-.7-2.1L.7 53C-.7 51.6.1 49.3 2 49l44.1-6.4c.8-.1 1.4-.6 1.8-1.3l19.7-40c.9-1.7 3.4-1.7 4.3 0z";
+    } else if (shapeName === "pentagon") {
+      svgPath = " m95.5 475.5l-95.5-293.9 250-181.6 250 181.6-95.5 293.9h-309z";
+    } else if (shapeName === "triangle") {
+      svgPath = "m0 433l250-433 250 433h-500z";
+    } else if (shapeName === "heart") {
+      svgPath =
+        "m0 129.4c0 139.3 250 309.2 250 309.2s248.9-171.1 250-309.2c0-71.3-58.1-129.4-129.4-129.4-54.8 0-102 35.1-120.6 83.3-18.6-48.2-65.8-83.3-120.6-83.3-71.3 0-129.4 58.1-129.4 129.4";
+    } else if (shapeName === "squaredTriangle")
+      svgPath = "M500,499.2H0V0L500,499.2z";
+
+    let svg = new fabric.Path(svgPath, {
+      fill: "#c8d1d9",
+      cornerColor: "#00d9e1",
+      borderColor: "#00d9e1",
+    });
+    canvas?.add(svg);
+  };
+
   return (
     <div className="editorContainer">
       <Navbar />
@@ -694,7 +767,16 @@ function EditorContainer() {
               {activeTab === "Elements" && (
                 <div className="elements">
                   <h1>Lines and patterns</h1>
-                  <div className="elementsContainer">
+                  <div
+                    className="elementsContainer"
+                    style={{
+                      flexWrap: "wrap",
+                      alignContent: "flex-start",
+                      height: "100%",
+                      justifyContent: "space-between",
+                      rowGap: "30px",
+                    }}
+                  >
                     <div
                       className="element"
                       onClick={() => addRectangle(canvas)}
@@ -709,6 +791,91 @@ function EditorContainer() {
                       onClick={() => addRoundedRectangle(canvas)}
                     >
                       <div className="roundedBorderSquare"></div>
+                    </div>
+
+                    {/* Triangle */}
+                    <div
+                      className="element"
+                      onClick={() => drawGeometricShape("triangle")}
+                    >
+                      <svg
+                        id="svg"
+                        xmlns="http://www.w3.org/2000/svg"
+                        preserveAspectRatio="none"
+                        viewBox="0 0 500 433"
+                      >
+                        <path d="m0 433l250-433 250 433h-500z"></path>
+                      </svg>
+                    </div>
+
+                    {/* hexagon */}
+                    <div
+                      className="element"
+                      onClick={() => drawGeometricShape("hexagon")}
+                    >
+                      <svg
+                        id="svg"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 488.4 423"
+                      >
+                        <path d="M366.3,0H122.1L0,211.5L122.1,423h244.2l122.1-211.5L366.3,0z"></path>
+                      </svg>
+                    </div>
+
+                    {/* pentagon */}
+                    <div
+                      className="element"
+                      onClick={() => drawGeometricShape("pentagon")}
+                    >
+                      <svg
+                        id="svg"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 500 475.5"
+                      >
+                        <path d="m95.5 475.5l-95.5-293.9 250-181.6 250 181.6-95.5 293.9h-309z"></path>
+                      </svg>
+                    </div>
+
+                    {/* heart */}
+                    <div
+                      className="element"
+                      onClick={() => drawGeometricShape("heart")}
+                    >
+                      <svg
+                        id="svg"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 500 438.6"
+                      >
+                        <path d="m0 129.4c0 139.3 250 309.2 250 309.2s248.9-171.1 250-309.2c0-71.3-58.1-129.4-129.4-129.4-54.8 0-102 35.1-120.6 83.3-18.6-48.2-65.8-83.3-120.6-83.3-71.3 0-129.4 58.1-129.4 129.4"></path>
+                      </svg>
+                    </div>
+
+                    {/* star */}
+                    <div
+                      className="element"
+                      onClick={() => drawGeometricShape("star")}
+                    >
+                      <svg
+                        id="svg"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 139.6 133"
+                      >
+                        <path d="M71.9 1.3l19.7 40c.3.7 1 1.2 1.8 1.3l44.1 6.4c1.9.3 2.7 2.7 1.3 4l-31.9 31.1c-.6.5-.8 1.3-.7 2.1l7.5 44c.3 1.9-1.7 3.4-3.4 2.5l-39.5-20.8c-.7-.4-1.5-.4-2.2 0l-39.5 20.8c-1.7.9-3.7-.6-3.4-2.5l7.5-44c.1-.8-.1-1.5-.7-2.1L.7 53C-.7 51.6.1 49.3 2 49l44.1-6.4c.8-.1 1.4-.6 1.8-1.3l19.7-40c.9-1.7 3.4-1.7 4.3 0z"></path>
+                      </svg>
+                    </div>
+
+                    {/* squared triangle */}
+                    <div
+                      className="element"
+                      onClick={() => drawGeometricShape("squaredTriangle")}
+                    >
+                      <svg
+                        id="svg"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 500 499.2"
+                      >
+                        <path d="M500,499.2H0V0L500,499.2z"></path>
+                      </svg>
                     </div>
                   </div>
                 </div>
@@ -1159,18 +1326,20 @@ function EditorContainer() {
             <div className="activeObjectSettings">
               <div className="color"></div>
 
-              {activeObject && activeObject.get("type") === "rect" && (
-                <div
-                  className="changeColor"
-                  style={{
-                    backgroundColor: `${currentObjectColor}`,
-                  }}
-                  onClick={() => {
-                    setActiveTab("ColorPalette");
-                    setOpenDrawer(true);
-                  }}
-                ></div>
-              )}
+              {activeObject &&
+                (activeObject.get("type") === "rect" ||
+                  activeObject.get("type") === "path") && (
+                  <div
+                    className="changeColor"
+                    style={{
+                      backgroundColor: `${currentObjectColor}`,
+                    }}
+                    onClick={() => {
+                      setActiveTab("ColorPalette");
+                      setOpenDrawer(true);
+                    }}
+                  ></div>
+                )}
               {activeObject && activeObject.get("type") === "circle" && (
                 <div
                   className="changeColor"

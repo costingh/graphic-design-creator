@@ -404,3 +404,7 @@
   color: #343537;
   font-size: 14px;
 }
+
+.element svg {
+  fill: #ccc;
+}
