@@ -278,6 +278,7 @@ function EditorContainer() {
       fill: "#c8d1d9",
       cornerColor: "#00d9e1",
       borderColor: "#00d9e1",
+      borderScaleFactor: 2,
     });
     canvasRefference.add(rect);
 
@@ -304,6 +305,7 @@ function EditorContainer() {
       objectCaching: false,
       cornerColor: "#00d9e1",
       borderColor: "#00d9e1",
+      borderScaleFactor: 2,
     });
     canvasRefference.add(rect);
     canvasRefference.renderAll();
@@ -317,6 +319,7 @@ function EditorContainer() {
       fill: "#c8d1d9",
       cornerColor: "#00d9e1",
       borderColor: "#00d9e1",
+      borderScaleFactor: 2,
     });
     canvasRefference.add(circle);
     /* canvas.item(numberOfDrawings).set({
@@ -341,6 +344,7 @@ function EditorContainer() {
       textAlign: "left",
       cornerColor: "#00d9e1",
       borderColor: "#00d9e1",
+      borderScaleFactor: 2,
     });
     canvasRefference.add(text).setActiveObject(text);
     setActiveObject(text);
@@ -587,8 +591,14 @@ function EditorContainer() {
   const addImage = (url) => {
     fabric.Image.fromURL(url, function (oImg) {
       // scale image down, and flip it, before adding it onto canvas
-      // oImg.scale(0.5).set('flipX', true);
+      // oImg.scale(0.5).set("flipX", true);
       oImg.scale(0.5).set({
+        cornerColor: "#00d9e1",
+        borderColor: "#00d9e1",
+        borderScaleFactor: 2,
+      });
+
+      /*  oImg.scale(0.5).set({
         clipPath: new fabric.Circle({
           radius: 300,
           originX: "center",
@@ -596,7 +606,7 @@ function EditorContainer() {
           cornerColor: "#00d9e1",
           borderColor: "#00d9e1",
         }),
-      });
+      }); */
       canvas.add(oImg);
     });
 
@@ -741,6 +751,7 @@ function EditorContainer() {
       fill: "#c8d1d9",
       cornerColor: "#00d9e1",
       borderColor: "#00d9e1",
+      borderScaleFactor: 2,
     });
     canvas?.add(svg);
   };
