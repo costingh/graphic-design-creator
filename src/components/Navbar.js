@@ -102,6 +102,12 @@ function Navbar() {
         onClick={() => {
           window.location.href = "/dashboard";
         }}
+        style={{
+          cursor: "pointer",
+          fontSize: "20px",
+          color: "#fff",
+          fontWeight: "600",
+        }}
       >
         Home
       </div>

@@ -165,6 +165,9 @@
   transition: all 0.3s ease;
   letter-spacing: 0.4px;
   font-weight: 400;
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
 }
 
 .deleteActiveObjButton:hover {
