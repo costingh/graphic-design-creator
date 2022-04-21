@@ -51,6 +51,17 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// get all designs
+router.get("/getDesigns/all", async (req, res) => {
+  try {
+    const designs = await Design.find();
+
+    res.status(200).json(designs);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 //update a design
 router.put("/:id", async (req, res) => {
   /* console.log(JSON.stringify(req.body)); */

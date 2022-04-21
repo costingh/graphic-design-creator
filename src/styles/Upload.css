@@ -82,7 +82,7 @@
 }
 
 .uploaded-images img {
-    border: 2px solid #222;
+    /* border: 2px solid #222; */
     border-radius: 5px;
 }
 .imageWrapper {
@@ -97,7 +97,7 @@
     z-index: -1;
     transition: all .4s ease-in-out;
     width: 100%;
-    height: 100%;
+    height: 98%;
     background-color: rgba(1, 1, 1, 0.8);
     position: absolute;
     top: 0;
@@ -108,8 +108,8 @@
 }
 
 .imageDeleteOverlay div {
-    color: #e1e1e1;
-    background-color: #000;
+    color: #222;
+    background-color: #ccc;
     padding: 10px 25px;
     border-radius: 5px;
     cursor: pointer;

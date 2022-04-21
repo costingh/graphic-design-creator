@@ -106,7 +106,7 @@ function RecommendedForYouDesigns() {
           </div>
         </div>
       )}
-      <h1 style={{ marginBottom: "35px" }}>All public designs</h1>
+      <h1 style={{ marginBottom: "35px" }}>Your designs</h1>
       <div className="designsContainer">
         {designs.map(
           (design, index) =>
