@@ -75,6 +75,31 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+//add a design to favorites
+router.put("/favorites/:id", async (req, res) => {
+  /* console.log(JSON.stringify(req.body)); */
+  try {
+    const design = await Design.findById(req.params.id);
+    await design.updateOne({ $set: { isFavourite: !design.isFavourite } });
+
+    res.status(200).json("The design has been added to favorites");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// change design name
+router.put("/name/:id/:name", async (req, res) => {
+  try {
+    const design = await Design.findById(req.params.id);
+    await design.updateOne({ $set: { name: req.params.name } });
+
+    res.status(200).json("The design name was updated!");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 // get all designs of a user
 router.get("/getDesigns/:email", async (req, res) => {
   try {

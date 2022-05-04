@@ -23,9 +23,9 @@ const SIDEBAR_CONFIG = [
     path: "M5 8.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5zm9 .5l-2.519 4-2.481-1.96-4 5.96h14l-5-8zm8-4v14h-20v-14h20zm2-2h-24v18h24v-18z",
   },
   {
-    name: "Folders",
-    link: "folders",
-    path: "M6.083 4c1.38 1.612 2.578 3 4.917 3h11v13h-20v-16h4.083zm.917-2h-7v20h24v-17h-13c-1.629 0-2.305-1.058-4-3z",
+    name: "Favorites",
+    link: "favorites",
+    path: "M12 5.173l2.335 4.817 5.305.732-3.861 3.71.942 5.27-4.721-2.524-4.721 2.525.942-5.27-3.861-3.71 5.305-.733 2.335-4.817zm0-4.586l-3.668 7.568-8.332 1.151 6.064 5.828-1.48 8.279 7.416-3.967 7.416 3.966-1.48-8.279 6.064-5.827-8.332-1.15-3.668-7.569z",
   },
   {
     name: "Upload",
@@ -44,7 +44,7 @@ function Sidebar() {
 
   useEffect(() => {
     if (window.location.href.split("/").includes("explore")) setActiveIndex(1);
-    else if (window.location.href.split("/").includes("folders"))
+    else if (window.location.href.split("/").includes("favorites"))
       setActiveIndex(2);
     else if (window.location.href.split("/").includes("upload"))
       setActiveIndex(3);

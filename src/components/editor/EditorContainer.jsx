@@ -756,6 +756,19 @@ function EditorContainer() {
     canvas?.add(svg);
   };
 
+  const handleSaveDesignName = async (e) => {
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const res = await fetch(
+      `/api/designs/name/${data.design._id}/${e.target.value}`,
+      requestOptions
+    );
+    const d = await res.json();
+  };
+
   return (
     <div className="editorContainer">
       <Navbar />
@@ -1462,6 +1475,21 @@ function EditorContainer() {
                   </svg>
                 </div>
               )}
+              {/* <div className="deleteActiveObjButton" onClick={handleSaveDesign}>
+                
+              </div> */}
+              <input
+                type="text"
+                defaultValue={data?.design.name}
+                style={{
+                  borderRadius: "5px",
+                  border: "1px solid #222",
+                  padding: "0px 10px",
+                  fontWeight: 500,
+                  fontSize: "15px",
+                }}
+                onChange={handleSaveDesignName}
+              />
               <div className="deleteActiveObjButton" onClick={handleSaveDesign}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

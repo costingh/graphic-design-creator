@@ -3,11 +3,9 @@ import "../styles/Workspace.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import RecommendedForYouDesigns from "./RecommendedForYouDesigns";
 import Upload from "./Upload";
-import Folders from "./Folders";
 import Trash from "./Trash";
 import Explore from "./Explore";
-import NewDesign from "./NewDesign";
-import EditorContainer from "./editor/EditorContainer";
+import Favorites from "./Favorites";
 
 function Workspace() {
   return (
@@ -24,8 +22,8 @@ function Workspace() {
             <Route path="/dashboard/upload">
               <Upload />
             </Route>
-            <Route path="/dashboard/folders">
-              <Folders />
+            <Route path="/dashboard/favorites">
+              <Favorites />
             </Route>
             <Route path="/dashboard">
               <RecommendedForYouDesigns />

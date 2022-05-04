@@ -64,6 +64,32 @@ function Explore() {
     setDesignCreated(data);
   };
 
+  const addToFavorites = async (newDesign) => {
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const res = await fetch(
+      `/api/designs/favorites/${newDesign._id}`,
+      requestOptions
+    );
+    const data = await res.json();
+    window.location.href = "/dashboard/explore";
+  };
+
+  const gotToDesign = (id) => {
+    window.location.href = `/design/${id}`;
+  };
+
+  const createOrOped = (design) => {
+    if (design.email === loginData.email) {
+      gotToDesign(design._id);
+    } else {
+      createDesign(design);
+    }
+  };
+
   if (designCreated?.status === 200) {
     return (window.location.href = `/design/${designCreated?.id}`);
   }
@@ -125,29 +151,53 @@ function Explore() {
                         columnGap: "15px",
                       }}
                     >
-                      <svg
+                      {/* <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
                         viewBox="0 0 24 24"
                       >
                         <path d="M12.015 7c4.751 0 8.063 3.012 9.504 4.636-1.401 1.837-4.713 5.364-9.504 5.364-4.42 0-7.93-3.536-9.478-5.407 1.493-1.647 4.817-4.593 9.478-4.593zm0-2c-7.569 0-12.015 6.551-12.015 6.551s4.835 7.449 12.015 7.449c7.733 0 11.985-7.449 11.985-7.449s-4.291-6.551-11.985-6.551zm-.015 5c1.103 0 2 .897 2 2s-.897 2-2 2-2-.897-2-2 .897-2 2-2zm0-2c-2.209 0-4 1.792-4 4 0 2.209 1.791 4 4 4s4-1.791 4-4c0-2.208-1.791-4-4-4z" />
-                      </svg>
-                      <p /* onClick={() => gotToDesign(design._id)} */>
-                        {design.name}
+                      </svg> */}
+                      <p
+                      /* onClick={() => gotToDesign(design._id)} */
+                      >
+                        {design.email.split("@")[0]}
                       </p>
                     </div>
 
-                    <svg
-                      onClick={() => createDesign(design)}
-                      width="24"
-                      height="24"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                    >
-                      <path d="M14 4h-13v18h20v-11h1v12h-22v-20h14v1zm10 5h-1v-6.293l-11.646 11.647-.708-.708 11.647-11.646h-6.293v-1h8v8z" />
-                    </svg>
+                    <div>
+                      {design.email === loginData.email && (
+                        <svg
+                          width="24"
+                          height="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          style={{ marginRight: "15px" }}
+                          onClick={() => addToFavorites(design)}
+                        >
+                          <path
+                            d={`${
+                              design.isFavourite
+                                ? "M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
+                                : "M15.668 8.626l8.332 1.159-6.065 5.874 1.48 8.341-7.416-3.997-7.416 3.997 1.481-8.341-6.064-5.874 8.331-1.159 3.668-7.626 3.669 7.626zm-6.67.925l-6.818.948 4.963 4.807-1.212 6.825 6.068-3.271 6.069 3.271-1.212-6.826 4.964-4.806-6.819-.948-3.002-6.241-3.001 6.241z"
+                            }`}
+                          />
+                        </svg>
+                      )}
+
+                      <svg
+                        onClick={() => createOrOped(design)}
+                        width="24"
+                        height="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                      >
+                        <path d="M14 4h-13v18h20v-11h1v12h-22v-20h14v1zm10 5h-1v-6.293l-11.646 11.647-.708-.708 11.647-11.646h-6.293v-1h8v8z" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
               )

@@ -25,6 +25,9 @@ const DesignSchema = new mongoose.Schema(
     isDeleted: {
       type: Boolean,
     },
+    isFavourite: {
+      type: Boolean,
+    },
   },
   { timestamps: true }
 );
