@@ -12,8 +12,12 @@ const designRoutes = require("./routes/designs");
 const imageRoutes = require("./routes/images");
 
 dotenv.config();
+
 const app = express();
+
+// middlewares
 app.use(express.json());
+app.use(express.static(path.resolve(__dirname, "./client/build")));
 
 const users = [];
 
