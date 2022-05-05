@@ -62,6 +62,7 @@ function Navbar() {
   const [opened1, setOpened1] = useState(false);
   const [opened2, setOpened2] = useState(false);
   const [designCreated, setDesignCreated] = useState(null);
+  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
   const handleOpenMenu = () => {
     setOpened1(!opened1);
@@ -92,6 +93,17 @@ function Navbar() {
     setDesignCreated(data);
   };
 
+  const handleLogout = () => {
+    if (localStorage.getItem("loginData")) {
+      localStorage.removeItem("loginData");
+      window.location.href = "/";
+    }
+  };
+
+  if (!loginData) {
+    return (window.location.href = "/");
+  }
+
   if (designCreated?.status === 200) {
     return (window.location.href = `/design/${designCreated?.id}`);
   }
@@ -115,7 +127,20 @@ function Navbar() {
         <div className="button" onClick={handleOpenMenu}>
           Create Design
         </div>
-        <img className="profileImage" src={loginData.picture} alt="" />
+        <img
+          className="profileImage"
+          src={loginData.picture}
+          alt=""
+          onClick={() => setIsDropdownOpened(!isDropdownOpened)}
+        />
+
+        <div
+          className="profileDropdown"
+          style={{ display: `${isDropdownOpened ? "block" : "none"}` }}
+        >
+          <p>{loginData.email}</p>
+          <p onClick={handleLogout}>Logout</p>
+        </div>
       </div>
       <div className={`absolute ${opened2 && "opened"}`}>
         <div
