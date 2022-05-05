@@ -1,5 +1,6 @@
 import GoogleLogin from "react-google-login";
 import { useState, useEffect } from "react";
+import "../styles/Login.css";
 
 export default function Login() {
   const [loginData, setLoginData] = useState(
@@ -39,7 +40,16 @@ export default function Login() {
 
   return (
     <header className="App-header">
-      <h1>Log in</h1>
+      <h1
+        style={{
+          fontWeight: 500,
+          fontSize: "23px",
+          color: "#ccc",
+          marginBottom: "30px",
+        }}
+      >
+        Log in or create an account using Google
+      </h1>
       <div>
         {/* {loginData ? (
           <div>

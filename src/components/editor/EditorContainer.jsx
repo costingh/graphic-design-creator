@@ -589,16 +589,18 @@ function EditorContainer() {
   };
 
   const addImage = (url) => {
-    fabric.Image.fromURL(url, function (oImg) {
-      // scale image down, and flip it, before adding it onto canvas
-      // oImg.scale(0.5).set("flipX", true);
-      oImg.scale(0.5).set({
-        cornerColor: "#00d9e1",
-        borderColor: "#00d9e1",
-        borderScaleFactor: 2,
-      });
+    fabric.Image.fromURL(
+      url,
+      function (oImg) {
+        // scale image down, and flip it, before adding it onto canvas
+        // oImg.scale(0.5).set("flipX", true);
+        oImg.scale(0.5).set({
+          cornerColor: "#00d9e1",
+          borderColor: "#00d9e1",
+          borderScaleFactor: 2,
+        });
 
-      /*  oImg.scale(0.5).set({
+        /*  oImg.scale(0.5).set({
         clipPath: new fabric.Circle({
           radius: 300,
           originX: "center",
@@ -607,8 +609,10 @@ function EditorContainer() {
           borderColor: "#00d9e1",
         }),
       }); */
-      canvas.add(oImg);
-    });
+        canvas.add(oImg);
+      },
+      { crossOrigin: "Anonymous" }
+    );
 
     /* canvas.item(numberOfDrawings).set({
       borderColor: "rgb(0, 166, 255)",
